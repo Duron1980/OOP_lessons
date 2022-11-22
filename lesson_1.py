@@ -15,37 +15,45 @@ Challenge:
 
 """
 import random
-from prettytable import PrettyTable
+from typing import Union
+
 
 class Product():
-    def __init__(self, name_product: str, product_quantities: float, price_product: int):
-        self.name_product = name_product
-        self.product_quantities = product_quantities
-        self.price_product = price_product
+    def __init__(self, name: str, price: int):
+        self.name = name
+        self.price = price
 
-    def calculate_cost(self):
-        return round(self.product_quantities * self.price_product, 2)
+    def calculate_cost(self, quantity: Union[int, float]):
+        return round(quantity * self.price, 2)
+
 
 class Shopping_Cart():
-    def __init__(self, objs: list):
-        self.cart = objs
-        self.show_check()
+    def __init__(self):
+        self.products: List[Product] = []
+        self.quantities: List[Union[int, float]] = []
 
-    def show_check(self):
-        sum = 0
-        check = PrettyTable()
-        check.field_names = ['Product name','Price per kg, grn:','Quantitie, kg:','Cost, grn:']
-        for product in self.cart:
-            check.add_row([product.name_product, product.price_product, product.product_quantities, product.calculate_cost()])
-            sum = sum + product.calculate_cost()
-        check.add_row(['','','TOTAL COST',sum])
-        print(check)
+    def putin_products(self, product: Product, quantity: Union[int, float]):
+        self.products.append(product)
+        self.quantities.append(quantity)
+
+    def show_total_cost(self):
+        total = 0
+        for product, quantity in zip(self.products, self.quantities):
+            total += product.calculate_cost(quantity)
+        return total
+
 
 def main():
-    goods = ['Cheese', 'Apple', 'Butter', 'Meat']
-    bag = [Product(value, product_quantities=round(random.uniform(1, 2), 2), price_product=random.randint(50, 300)) for value in goods]
-    my_cart = Shopping_Cart(bag)
+    # goods = ['Cheese', 'Apple', 'Butter', 'Meat']
+    Cheese = Product('Chheae', 350)
+    Apple = Product('Apple', 42)
+    Meet = Product('Meet', 200)
+    cart = Shopping_Cart()
+    cart.putin_products(Cheese, 2)
+    cart.putin_products(Apple, 1.5)
+    cart.putin_products(Meet, 2.5)
+    print(cart.show_total_cost())
+
 
 if __name__ == '__main__':
     main()
-
