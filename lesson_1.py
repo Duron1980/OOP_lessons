@@ -49,9 +49,9 @@ def main():
     Apple = Product('Apple', 42)
     Meet = Product('Meet', 200)
     cart = Shopping_Cart()
-    cart.putin_products(Cheese, 2)
-    cart.putin_products(Apple, 1.5)
-    cart.putin_products(Meet, 2.5)
+    cart.add_to_cart(Cheese, 2)
+    cart.add_to_cart(Apple, 1.5)
+    cart.add_to_cart(Meet, 2.5)
     print(cart.show_total_cost())
 
 
