@@ -32,7 +32,7 @@ class Shopping_Cart():
         self.products: List[Product] = []
         self.quantities: List[Union[int, float]] = []
 
-    def putin_products(self, product: Product, quantity: Union[int, float]):
+    def add_to_cart(self, product: Product, quantity: Union[int, float]):
         self.products.append(product)
         self.quantities.append(quantity)
 
