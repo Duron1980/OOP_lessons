@@ -6,6 +6,11 @@ class Product():
         self.name = name
         self.price = price
 
+    # def __eq__(self, other):
+    #     if self.name == other.name and self.price == other.price:
+    #         return f'Objects equal'
+    #     return f'Objects not equal'
+
     def calculate_cost(self, quantity: Union[int, float]):
         return round(quantity * self.price, 2)
 
@@ -21,12 +26,18 @@ class Shopping_Cart():
         self.products: List[Product] = []
         self.quantities: List[Union[int, float]] = []
 
+    def __eq__(self, other):
+        if self.products == other.products and self.quantities == other.quantities:
+            return f'Objects equal'
+        return f'Objects not equal'
+
     def add_to_cart(self, product: Product, quantity: Union[int, float]):
         if product not in self.products:
             self.products.append(product)
             self.quantities.append(quantity)
         else:
-            self.quantities[self.products.index(product)] += quantity
+            idx = self.products.index(product)
+            self.quantities[idx] += quantity
 
     def show_total_cost(self):
         total = 0
@@ -35,23 +46,16 @@ class Shopping_Cart():
             print(f'Product in cart now is {str(product)}, quantity is {quantity}')
         return total
 
-    def add_cart_to_cart(self, another_cart):
-        base_cart = {}
-        append_cart = {}
-        for product, quantity in zip(self.products, self.quantities):
-            base_cart[product] = quantity
-        for product, quantity in zip(another_cart.products, another_cart.quantities):
-            append_cart[product] = quantity
-        for product in append_cart:
-            if product in base_cart:
-                base_cart[product] += append_cart[product]
-            else:
-                base_cart[product] = append_cart[product]
-        self.products = []
-        self.quantities = []
-        for value in base_cart:
-            self.products.append(value)
-            self.quantities.append(base_cart[value])
+    def __add__(self, other):
+        new_cart = Shopping_Cart()
+        new_cart.products = self.products.copy()
+        new_cart.quantities = self.quantities.copy()
+        if isinstance(other, Product):
+            new_cart.add_product(other, 1)
+        if isinstance(other, Shopping_Cart):
+            for product, quantity in zip(other.products, other.quantities):
+                new_cart.add_to_cart(product, quantity)
+        return new_cart
 
 
 def main():
@@ -60,7 +64,6 @@ def main():
     meet = Product('Meet', 200)
     cart1 = Shopping_Cart()
     cart2 = Shopping_Cart()
-    cart3 = Shopping_Cart()
     print('Cart1')
     cart1.add_to_cart(cheeze, 3)
     cart1.add_to_cart(apple, 4)
@@ -71,17 +74,9 @@ def main():
     cart2.add_to_cart(apple, 2)
     print(f'Total cost in cart2 is {cart2.show_total_cost()}')
     print('_____________________________________________________________')
-    print('Cart3')
-    cart3.add_to_cart(meet, 1)
-    print(f'Total cost in cart3 is {cart3.show_total_cost()}')
-    print('_____________________________________________________________')
-    print("Add cart2 to cart1")
-    cart1.add_cart_to_cart(cart2)
-    print(f'Total cost in cart1 is {cart1.show_total_cost()}')
-    print('_____________________________________________________________')
-    print("Add cart3 to cart1")
-    cart1.add_cart_to_cart(cart3)
-    print(f'Total cost in cart1 is {cart1.show_total_cost()}')
+    New_cart = cart1 + cart2
+    print(f'Total cost in cart1 is {New_cart.show_total_cost()}')
+    print(cart1 == cart2)
 
 
 if __name__ == '__main__':
