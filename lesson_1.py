@@ -6,11 +6,6 @@ class Product():
         self.name = name
         self.price = price
 
-    # def __eq__(self, other):
-    #     if self.name == other.name and self.price == other.price:
-    #         return f'Objects equal'
-    #     return f'Objects not equal'
-
     def calculate_cost(self, quantity: Union[int, float]):
         return round(quantity * self.price, 2)
 
@@ -20,16 +15,14 @@ class Product():
     def __float__(self):
         return self.price
 
+    def __repr__(self):
+        return f'class-{self.__class__}, product name - {self.name}, price - {self.price}'
+
 
 class Shopping_Cart():
     def __init__(self):
         self.products: List[Product] = []
         self.quantities: List[Union[int, float]] = []
-
-    def __eq__(self, other):
-        if self.products == other.products and self.quantities == other.quantities:
-            return f'Objects equal'
-        return f'Objects not equal'
 
     def add_to_cart(self, product: Product, quantity: Union[int, float]):
         if product not in self.products:
@@ -51,12 +44,19 @@ class Shopping_Cart():
         new_cart.products = self.products.copy()
         new_cart.quantities = self.quantities.copy()
         if isinstance(other, Product):
-            new_cart.add_product(other, 1)
+            new_cart.add_to_cart(other, 1)
         if isinstance(other, Shopping_Cart):
+            if other == new_cart:
+                new_cart.quantities = [quantity * 2 for quantity in new_cart.quantities]
+                return new_cart
             for product, quantity in zip(other.products, other.quantities):
                 new_cart.add_to_cart(product, quantity)
         return new_cart
 
+    def __eq__(self, other):
+        products = other.products
+        quantities = other.quantities
+        return self.products == products, self.quantities == quantities
 
 def main():
     cheeze = Product('Cheeze', 10.3)
@@ -65,18 +65,17 @@ def main():
     cart1 = Shopping_Cart()
     cart2 = Shopping_Cart()
     print('Cart1')
-    cart1.add_to_cart(cheeze, 3)
+    # cart1.add_to_cart(cheeze, 3)
     cart1.add_to_cart(apple, 4)
     print(f'Total cost in cart1 is {cart1.show_total_cost()}')
     print('_____________________________________________________________')
     print('Cart2')
-    cart2.add_to_cart(meet, 2)
-    cart2.add_to_cart(apple, 2)
+    # cart2.add_to_cart(meet, 2)
+    cart2.add_to_cart(apple, 4)
     print(f'Total cost in cart2 is {cart2.show_total_cost()}')
     print('_____________________________________________________________')
     New_cart = cart1 + cart2
-    print(f'Total cost in cart1 is {New_cart.show_total_cost()}')
-    print(cart1 == cart2)
+    print(f'Total cost in New_cart is {New_cart.show_total_cost()}')
 
 
 if __name__ == '__main__':
