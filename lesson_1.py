@@ -54,9 +54,7 @@ class Shopping_Cart():
         return new_cart
 
     def __eq__(self, other):
-        products = other.products
-        quantities = other.quantities
-        return self.products == products, self.quantities == quantities
+        return set(self.products) == set(other.products), set(self.quantities) == set(other.quantities)
 
 def main():
     cheeze = Product('Cheeze', 10.3)
@@ -65,18 +63,18 @@ def main():
     cart1 = Shopping_Cart()
     cart2 = Shopping_Cart()
     print('Cart1')
-    # cart1.add_to_cart(cheeze, 3)
+    cart1.add_to_cart(cheeze, 3)
     cart1.add_to_cart(apple, 4)
     print(f'Total cost in cart1 is {cart1.show_total_cost()}')
     print('_____________________________________________________________')
     print('Cart2')
-    # cart2.add_to_cart(meet, 2)
     cart2.add_to_cart(apple, 4)
+    cart2.add_to_cart(cheeze, 3)
     print(f'Total cost in cart2 is {cart2.show_total_cost()}')
     print('_____________________________________________________________')
     New_cart = cart1 + cart2
     print(f'Total cost in New_cart is {New_cart.show_total_cost()}')
-
+    print(cart1 == cart2)
 
 if __name__ == '__main__':
     main()
