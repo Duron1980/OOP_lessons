@@ -54,7 +54,7 @@ class Shopping_Cart():
         return new_cart
 
     def __eq__(self, other):
-        return set(self.products) == set(other.products), set(self.quantities) == set(other.quantities)
+        return set(self.products) == set(other.products) and set(self.quantities) == set(other.quantities)
 
 def main():
     cheeze = Product('Cheeze', 10.3)
